@@ -32,9 +32,9 @@ export default function Header() {
                 textTransform: "none",
                 fontFamily: "Montserrat",
                 borderRadius: "10px",
-                bgcolor: "#e88205",
+                bgcolor: "black",
                 "&:hover": {
-                  bgcolor: "black",
+                  bgcolor: "#e88205",
                 },
               }}
             >
