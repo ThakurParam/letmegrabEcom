@@ -94,7 +94,16 @@ const MenuArray = [
 export default function Footer() {
   return (
     <>
-      <Box sx={{ py: 5 }}>
+      <Box
+        sx={{
+          mt: 7,
+          py: 5,
+          // borderTop: "1px solid black",
+          boxShadow: "0 -4px 10px rgba(0, 0, 0, 0.1)",
+          backgroundColor: "white",
+          zIndex: 10,
+        }}
+      >
         <Section>
           <Box>
             <Grid container spacing={2}>

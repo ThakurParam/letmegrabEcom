@@ -1,15 +1,15 @@
-import "./App.css";
 import { Box } from "@mui/material";
-import Header from "./assets/Header";
-import Footer from "./assets/Footer";
+import HomePage from "./components/Home/HomePage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Box>
-        <Header></Header>
-        <Footer />
-      </Box>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
