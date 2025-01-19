@@ -42,37 +42,63 @@ export default function Header() {
             }}
           >
             <Box>
-              <img alt="logo" src="/images/image.png" />
+              <img
+                alt="logo"
+                src="/images/image.png"
+                onClick={() => navigate("/")}
+                style={{ cursor: "pointer" }}
+              />
             </Box>
             {userName ? (
-              <Box display="flex" alignItems="center" gap={1}>
-                <Avatar
-                  alt={userName}
-                  src={avatarUrl || ""}
-                  sx={{ height: "35px", width: "35px", cursor: "pointer" }}
-                  onClick={handleAvatarClick}
-                />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 4,
+                }}
+              >
                 <Typography
                   variant="p"
-                  sx={{ fontFamily: "Montserrat", fontWeight: 600 }}
+                  sx={{
+                    fontFamily: "Montserrat",
+                    textDecoration: "underline",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate("/our-product")}
                 >
-                  {userName}
+                  Our Products
                 </Typography>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                  }}
-                >
-                  <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
-                </Menu>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Avatar
+                    alt={userName}
+                    src={avatarUrl || ""}
+                    sx={{ height: "35px", width: "35px", cursor: "pointer" }}
+                    onClick={handleAvatarClick}
+                  />
+                  <Typography
+                    variant="p"
+                    sx={{ fontFamily: "Montserrat", fontWeight: 600 }}
+                  >
+                    {userName}
+                  </Typography>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                  >
+                    <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+                  </Menu>
+                </Box>
               </Box>
             ) : (
               <Button
