@@ -9,15 +9,41 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
+  };
+  const handleLogin = () => {
+    const storedUser = JSON.parse(localStorage.getItem("userData"));
+
+    if (!storedUser) {
+      enqueueSnackbar("Account not found, please Sign up first.", {
+        variant: "error",
+      });
+      setTimeout(() => {
+        navigate("/sign-up");
+      }, 2000);
+    } else {
+      const { userName, password: storedPassword } = storedUser;
+
+      if (userName === username && storedPassword === password) {
+        enqueueSnackbar("Login successful!", { variant: "success" });
+        navigate("/");
+      } else {
+        enqueueSnackbar("Invalid credentials, please try again.", {
+          variant: "error",
+        });
+      }
+    }
   };
 
   return (
@@ -75,6 +101,8 @@ export default function Login() {
                           width: "100%",
                         }}
                         placeholder="Enter your userName.."
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                       />
                       <Input
                         type={showPassword ? "text" : "password"}
@@ -87,6 +115,8 @@ export default function Login() {
                           width: "100%",
                         }}
                         placeholder="Enter your password.."
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -119,6 +149,7 @@ export default function Login() {
                             bgcolor: "#e88205",
                           },
                         }}
+                        onClick={handleLogin}
                       >
                         Log In
                       </Button>
