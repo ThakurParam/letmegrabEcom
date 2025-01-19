@@ -148,7 +148,7 @@ export default function Caraousel() {
                     height: "100%",
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
                     color: "#fff",
-                    display: "flex",
+                    display: { md: "flex", xs: "none" },
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",

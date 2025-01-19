@@ -91,7 +91,7 @@ export default function SignUp() {
                 alignItems: "center",
               }}
             >
-              <Box sx={{ width: "70%" }}>
+              <Box sx={{ width: { md: "70%", xs: "90%" } }}>
                 <Stack spacing={3}>
                   <Box sx={{ height: "35px", width: "150px" }}>
                     <img
@@ -297,7 +297,13 @@ export default function SignUp() {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Box sx={{ height: "820px", width: "100%" }}>
+            <Box
+              sx={{
+                height: "820px",
+                width: "100%",
+                display: { md: "flex", xs: "none" },
+              }}
+            >
               <img
                 src="/images/loginimage.png"
                 alt="banner-image"
