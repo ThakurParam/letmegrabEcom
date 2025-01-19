@@ -16,6 +16,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProductModal from "../../assets/ProductModal";
 import DeleteModal from "../../assets/DeleteModal";
+import { enqueueSnackbar } from "notistack";
+import UpdateModal from "../../assets/UpdateModal";
 
 export default function DataTable() {
   const navigate = useNavigate();
@@ -25,7 +27,10 @@ export default function DataTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productData, setProductData] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openz, setOpenz] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(null);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -84,6 +89,14 @@ export default function DataTable() {
     setOpen(false);
     setSelectedId(null);
   };
+  const handleUpdateClick = (id) => {
+    setSelectedIds(id);
+    setModalOpen(true);
+  };
+  const handleCloseModals = () => {
+    setModalOpen(false);
+    setSelectedIds(null);
+  };
   const handleConfirmDelete = async () => {
     if (selectedId) {
       try {
@@ -95,8 +108,10 @@ export default function DataTable() {
         );
         if (response.ok) {
           console.log("Item deleted successfully!");
+          enqueueSnackbar("Item deleted successfully!", { variant: "success" });
         } else {
           console.error("Failed to delete the item.");
+          enqueueSnackbar("Failed to delete the item.", { variant: "error" });
         }
       } catch (error) {
         console.error("Error:", error);
@@ -104,6 +119,7 @@ export default function DataTable() {
       handleClose();
     }
   };
+
   return (
     <>
       <Section>
@@ -168,7 +184,10 @@ export default function DataTable() {
                           />
                         </Tooltip>
                         <Tooltip title="Update" placement="top">
-                          <Update sx={{ cursor: "pointer" }} />
+                          <Update
+                            sx={{ cursor: "pointer", color: "green" }}
+                            onClick={() => handleUpdateClick(row.id)}
+                          />
                         </Tooltip>
                       </Box>
                     </TableCell>
@@ -189,6 +208,11 @@ export default function DataTable() {
         handleClose={handleClose}
         handleConfirmDelete={handleConfirmDelete}
       />
+      <UpdateModal
+        open={modalOpen}
+        handleClose={handleCloseModals}
+        id={selectedIds}
+      />{" "}
     </>
   );
 }
