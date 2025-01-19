@@ -1,8 +1,10 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
 import Section from "../common/Section";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
     <>
       <Box
@@ -37,6 +39,7 @@ export default function Header() {
                   bgcolor: "#e88205",
                 },
               }}
+              onClick={() => navigate("/login")}
             >
               Log In/Sign Up
             </Button>
