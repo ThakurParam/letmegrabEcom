@@ -17,10 +17,9 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  // Log out function
   const handleLogOut = () => {
-    localStorage.clear(); // Clear all data in localStorage
-    window.location.reload(); // Refresh the page
+    localStorage.clear();
+    window.location.reload();
   };
   return (
     <>
