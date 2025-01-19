@@ -40,7 +40,14 @@ export default function ShopNow() {
               bgcolor: "#e88205",
               cursor: "pointer",
             }}
-            onClick={() => navigate("/our-product")}
+            onClick={() => {
+              const userData = JSON.parse(localStorage.getItem("userData"));
+              if (userData && userData.userName) {
+                navigate("/our-product");
+              } else {
+                alert("Please continue by logging in.");
+              }
+            }}
           >
             Shop Now
           </Button>
