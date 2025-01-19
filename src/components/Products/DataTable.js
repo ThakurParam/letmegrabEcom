@@ -8,10 +8,18 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  InputAdornment,
+  Typography,
+  Button,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Section from "../../common/Section";
-import { Delete, Update, Visibility } from "@mui/icons-material";
+import { Delete, Search, Update, Visibility } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProductModal from "../../assets/ProductModal";
@@ -22,21 +30,29 @@ import UpdateModal from "../../assets/UpdateModal";
 export default function DataTable() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productData, setProductData] = useState(null);
   const [open, setOpen] = useState(false);
-  const [openz, setOpenz] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState(null);
+  const [visibleProducts, setVisibleProducts] = useState(10);
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("https://fakestoreapi.com/products");
-        setProducts(response.data);
-        console.log(response.data);
+        const [productsResponse, categoriesResponse] = await Promise.all([
+          axios.get("https://fakestoreapi.com/products"),
+          axios.get("https://fakestoreapi.com/products/categories"),
+        ]);
+        setProducts(productsResponse.data);
+        setFilteredProducts(productsResponse.data);
+        setCategories(["All", ...categoriesResponse.data]);
       } catch (err) {
         setError("Failed to fetch data");
         console.error(err);
@@ -45,8 +61,20 @@ export default function DataTable() {
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    const filtered = products.filter((product) => {
+      const matchesSearch = product.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+    setFilteredProducts(filtered);
+  }, [searchTerm, selectedCategory, products]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -63,6 +91,7 @@ export default function DataTable() {
     }
     return text;
   };
+
   const handleViewClick = async (id) => {
     try {
       const response = await axios.get(
@@ -89,14 +118,17 @@ export default function DataTable() {
     setOpen(false);
     setSelectedId(null);
   };
+
   const handleUpdateClick = (id) => {
     setSelectedIds(id);
     setModalOpen(true);
   };
+
   const handleCloseModals = () => {
     setModalOpen(false);
     setSelectedIds(null);
   };
+
   const handleConfirmDelete = async () => {
     if (selectedId) {
       try {
@@ -107,10 +139,8 @@ export default function DataTable() {
           }
         );
         if (response.ok) {
-          console.log("Item deleted successfully!");
           enqueueSnackbar("Item deleted successfully!", { variant: "success" });
         } else {
-          console.error("Failed to delete the item.");
           enqueueSnackbar("Failed to delete the item.", { variant: "error" });
         }
       } catch (error) {
@@ -122,6 +152,17 @@ export default function DataTable() {
 
   return (
     <>
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          fontFamily: "Montserrat",
+          mb: 5,
+          fontWeight: 600,
+        }}
+      >
+        Find Your Best Match Products
+      </Typography>
       <Section>
         <Box>
           <TableContainer
@@ -129,7 +170,7 @@ export default function DataTable() {
             sx={{
               width: "100%",
               margin: "auto",
-              mt: 4,
+              //   mt: 4,
               borderRadius: "18px",
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
               p: 1,
@@ -146,6 +187,70 @@ export default function DataTable() {
               },
             }}
           >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: { md: "row", xs: "column" },
+                my: 1,
+                p: 2,
+                gap: 2,
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: { md: "45%", xs: "90%" },
+                }}
+              >
+                <Search
+                  style={{
+                    position: "absolute",
+                    right: "0px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search your term here..."
+                  style={{
+                    paddingLeft: "40px",
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: "10px",
+                    border: "2px solid grey",
+                    outline: "none",
+                  }}
+                />
+              </Box>
+              <FormControl
+                sx={{
+                  width: { md: "45%", xs: "97%" },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    height: "38px",
+                  },
+                }}
+              >
+                <InputLabel>Category</InputLabel>
+                <Select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  label="Category"
+                  sx={{ height: "30px" }}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
             <Table>
               <TableHead>
                 <TableRow>
@@ -160,8 +265,8 @@ export default function DataTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((row) => (
-                  <TableRow>
+                {filteredProducts?.slice(0, visibleProducts).map((row) => (
+                  <TableRow key={row.id}>
                     <TableCell className="tablecell">{row.id}</TableCell>
                     <TableCell className="tablecell">{row.title}</TableCell>
                     <TableCell className="tablecell">{row.price}</TableCell>
@@ -196,6 +301,45 @@ export default function DataTable() {
               </TableBody>
             </Table>
           </TableContainer>
+          <Box sx={{ textAlign: "center", my: 2 }}>
+            {visibleProducts < filteredProducts.length ? (
+              <Button
+                variant="contained"
+                onClick={() => setVisibleProducts(filteredProducts.length)}
+                sx={{
+                  padding: "8px 20px",
+                  backgroundColor: "#4CAF50",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  textTransform: "none",
+                  fontFamily: "Montserrat",
+                  fontWeight: 600,
+                }}
+              >
+                View More
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => setVisibleProducts(10)}
+                sx={{
+                  padding: "8px 20px",
+                  backgroundColor: "#f44336",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  textTransform: "none",
+                  fontFamily: "Montserrat",
+                  fontWeight: 600,
+                }}
+              >
+                View Less
+              </Button>
+            )}
+          </Box>
         </Box>
       </Section>
       <ProductModal
@@ -212,7 +356,7 @@ export default function DataTable() {
         open={modalOpen}
         handleClose={handleCloseModals}
         id={selectedIds}
-      />{" "}
+      />
     </>
   );
 }
