@@ -141,7 +141,7 @@ export default function UpdateModal({ open, handleClose, id }) {
                 onClick={handleClose}
               />
             </Box>
-            <Divider sx={{ bgcolor: "black" }} />
+            <Divider sx={{ bgcolor: "black", my: 1 }} />
             <Box
               sx={{
                 display: "flex",
