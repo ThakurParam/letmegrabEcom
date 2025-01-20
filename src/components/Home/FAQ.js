@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Container,
   Grid,
   Typography,
@@ -133,6 +134,36 @@ export default function FAQ() {
                     </AccordionDetails>
                   </Accordion>
                 ))}
+                <Box>
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Montserrat",
+                      fontSize: "15px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {" "}
+                    Have more doubts? Connect by clicking the button below to
+                    book your free 1:1 counselling session
+                  </Typography>
+                  <Button
+                    sx={{
+                      fontFamily: "Montserrat",
+                      fontSize: "15px",
+                      bgcolor: "black",
+                      color: "white",
+                      borderRadius: "10px",
+                      textTransform: "none",
+                      my: 2,
+                      px: 2,
+                      py: 0.5,
+                    }}
+                  >
+                    {" "}
+                    Connect Now
+                  </Button>
+                </Box>
               </Box>
             </Grid>
             <Grid
