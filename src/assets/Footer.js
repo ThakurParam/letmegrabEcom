@@ -201,8 +201,15 @@ export default function Footer() {
             sx={{ fontFamily: "Montserrat", fontSize: "10px" }}
           >
             Designed by{" "}
-            <span style={{ fontWeight: 600, cursor: "pointer" }}>Param</span> @
-            LetmeGrab
+            <span style={{ fontWeight: 600, cursor: "pointer" }}>
+              <a
+                style={{ textDecoration: "none" }}
+                href="https://port-folio-nine-sable.vercel.app/"
+              >
+                Param
+              </a>
+            </span>{" "}
+            @ LetmeGrab
           </Typography>
         </Box>
       </Box>
