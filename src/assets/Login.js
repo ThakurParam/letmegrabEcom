@@ -29,9 +29,9 @@ export default function Login() {
       enqueueSnackbar("Account not found, please Sign up first.", {
         variant: "error",
       });
-      setTimeout(() => {
-        navigate("/sign-up");
-      }, 2000);
+      // setTimeout(() => {
+      //   // navigate("/sign-up");
+      // }, 2000);
     } else {
       const { userName, password: storedPassword } = storedUser;
 
